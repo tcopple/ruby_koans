@@ -30,7 +30,17 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  total = 0
+  counts = Hash.new(0)
+  dice.each {|d| counts[d] += 1}
+
+  total += 1000 * (counts[1].to_i / 3.to_i) if counts.has_key? 1
+  total += ((counts[1] % 3) * 100) if counts.has_key? 1
+  total += ((counts[5] % 3) * 50) if counts.has_key? 5
+
+  counts.delete(1)
+
+  total = counts.keys.inject(total) {|score, key| score + ((counts[key].to_i / 3.to_i) * key * 100)}
 end
 
 class AboutScoringProject < EdgeCase::Koan
